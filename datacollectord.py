@@ -24,7 +24,7 @@ from   urdecorators import show_exceptions_and_frames as trap
 ###
 __author__ = 'Skyler He'
 __copyright__ = 'Copyright 2021'
-__credits__ = None
+__credits__ = 'George Flanagin'
 __version__ = 1.0
 __maintainer__ = 'Skyler He'
 __email__ = ['yingxinskyler.he@gmail.com', 'skyler.he@richmond.edu']
@@ -80,34 +80,6 @@ def handler(signum:int, stack:object=None) -> None:
         return
 
 
-def collect_power_data(db:object, node_dict:dict) -> int:
-    """
-    Use ACT's tools to poll the nodes and write the fact table
-    of the database.
-    """
-    global exe_statement
-    blob=json.loads(dorunrun(
-        exe_statement, return_datatype=str).strip())
-
-    #########################################################
-    # The times for reading each node are not significantly
-    # different from each other, so take the first one.
-    #########################################################
-    t = int(time.time())
-
-    #########################################################
-    # Use a dict comprehension to reduce the bulk of the reply.
-    #########################################################
-    wattage = {k:v for k, v in blob.items() if k in wattage_keys}
-    for k, v in wattage.items():
-        point = db_names[k]
-        for kk, vv in v.items():
-            db.execute_SQL(sql_statement, t, node_dict[kk], point, vv)
-        db.commit()
-        
-    return os.EX_OK
-
-
 def dither_time(t:int) -> int:
     """
     Avoid measuring the power at regular intervals.
@@ -119,12 +91,10 @@ def dither_time(t:int) -> int:
 
 
 @trap
-def skeleton_main(myargs:argparse.Namespace) -> int:
+def datacollectord_main(myargs:argparse.Namespace) -> int:
     """
-    This function just manages the loop. 
     """
     global db_handle
-    global exe_statement
 
     # Get an explicit list of node names in case the "all" 
     # partition is undefined in this environment.
