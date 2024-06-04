@@ -27,7 +27,7 @@ __copyright__ = 'Copyright 2021'
 __credits__ = None
 __version__ = 1.0
 __maintainer__ = 'Skyler He'
-__email__ = ['skylerheyingxin@gmail.com', 'gflanagin@richmond.edu']
+__email__ = ['yingxinskyler.he@gmail.com', 'skyler.he@richmond.edu']
 
 #################################################
 # This program has a lot of static data
